@@ -1,0 +1,40 @@
+# Training / evaluation configuration (Table I protocol).
+# Values not reported in the paper are marked "(not in paper)".
+
+models: [cnode, neural_ode, gru, rnn, lstm, transformer, persistence]
+
+model:
+  cnode:
+    latent_dim: 32              # (not in paper)
+    hidden_dim: 64              # (not in paper)
+    enc_hidden_dim: 64          # (not in paper)
+    align_hidden_dim: 32        # "lightweight regressors" f_tau, f_gamma
+    lambda_kl: 0.1              # lambda_KL : lambda_C = 1 : 1 is best (Fig. 2);
+                                # absolute scale not reported, 0.1 chosen on synthetic data
+    lambda_c: 0.1
+    contrast_delta: 0.5         # cosine threshold delta for positives (not in paper)
+    contrast_temperature: 0.1   # InfoNCE temperature (not in paper)
+    ode_method: dopri5
+    rtol: 1.0e-4
+    atol: 1.0e-5
+  sequence:                     # RNN / LSTM / GRU / Transformer baselines
+    hidden_dim: 64
+    n_layers: 1
+
+train:
+  epochs: 400
+  batch_size: 32
+  lr: 3.0e-3
+  weight_decay: 1.0e-5
+  grad_clip: 5.0
+  patience: 60                  # early stopping on inner-validation forecast MSE
+  seed: 0
+  device: null                  # null -> cuda if available else cpu
+  log_every: 25
+
+eval:
+  n_folds: 5                    # 5-fold subject-level cross-validation
+  val_fraction: 0.1             # inner validation split of each training fold
+  n_forecast: 1                 # forecast the last visit from the earlier ones
+  seed: 0
+  save_checkpoints: true

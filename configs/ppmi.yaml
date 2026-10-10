@@ -1,0 +1,37 @@
+# PPMI cohort construction. Column names differ between PPMI data releases:
+# open your downloaded CSVs and adjust the col_* entries before running.
+
+manifest_csv: /path/to/ppmi/T1_collection.csv            # LONI IDA image-collection export
+freesurfer_dir: /path/to/freesurfer_subjects             # $SUBJECTS_DIR
+participant_status_csv: /path/to/ppmi/Participant_Status.csv   # set to null to use manifest "Group"
+demographics_csv: /path/to/ppmi/Demographics.csv               # set to null to use manifest Age/Sex
+
+# Manifest (LONI collection) columns
+col_subject: Subject
+col_image_id: Image Data ID
+col_acq_date: Acq Date
+col_visit: Visit
+col_group: Group
+col_age: Age
+col_sex: Sex
+
+# Study-data columns
+col_patno: PATNO
+col_cohort: COHORT
+pd_cohort_values: [1, "Parkinson's Disease", PD]
+col_birthdate: BIRTHDT
+col_demo_sex: SEX
+manifest_pd_values: [PD]
+
+# FreeSurfer directory naming. Longitudinal stream (recommended):
+#   "{subject}_{image_id}.long.{subject}_base"
+fs_dir_pattern: "{subject}_{image_id}.long.{subject}_base"
+
+feature_type: region          # region = 68 DK thickness; vertex = fsaverage-resampled thickness
+vertex_target: fsaverage5
+normalize_volumes_by_etiv: true
+
+min_visits: 2
+max_visits: 3                 # the paper's cohort has 2-3 visits per subject
+min_gap_days: 90
+thickness_range: [0.5, 5.0]
